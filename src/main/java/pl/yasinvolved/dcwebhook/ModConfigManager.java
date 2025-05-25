@@ -23,7 +23,7 @@ public class ModConfigManager {
 
     public static void load() {        
         if (!CONFIG_FILE.exists()) {
-            ModConfigManager.config = new ModConfig("", false);
+            ModConfigManager.config = new ModConfig("", false, "", false);
             save();
         } else {
             try (FileReader reader = new FileReader(CONFIG_FILE)) {

@@ -88,10 +88,7 @@ public class DiscordWebhook implements ModInitializer {
 		embed.setTitle("Server is running");
 		embed.setColor(0x00ff00);
 
-		embed.addField(new EmbedField("Server Name", server.getName(), true));
-		embed.addField(new EmbedField("Server IP", server.getServerIp(), true));
-		embed.addField(new EmbedField("Message of the day", server.getServerMotd(), false));
-		embed.addField(new EmbedField("Gamemode", server.getDefaultGameMode().toString(), false));
+		addServerInfoToEmbed(embed, server);
 
 		ExecuteParams params = new ExecuteParams();
 		params.setUsername("Server Lifecycle Notifier - " + server.getName());
@@ -105,10 +102,7 @@ public class DiscordWebhook implements ModInitializer {
 		embed.setTitle("Server has stopped");
 		embed.setColor(0xff0000);
 		
-		embed.addField(new EmbedField("Server Name", server.getName(), true));
-		embed.addField(new EmbedField("Server IP", server.getServerIp(), true));
-		embed.addField(new EmbedField("Message of the day", server.getServerMotd(), false));
-		embed.addField(new EmbedField("Gamemode", server.getDefaultGameMode().toString(), false));
+		addServerInfoToEmbed(embed, server);
 
 		ExecuteParams params = new ExecuteParams();
 		params.setUsername("Server Lifecycle Notifier - " + server.getName());
@@ -121,16 +115,13 @@ public class DiscordWebhook implements ModInitializer {
 
 	private void onPlayerJoined(ServerPlayNetworkHandler handler, PacketSender sender, MinecraftServer server) {
 		ServerPlayerEntity player = handler.player;
-		String playerName = player.getDisplayName().getString();
 
 		Embed embed = new Embed();
-		embed.setTitle(playerName + " has joined the server");
+		embed.setTitle(player.getDisplayName().getString() + " has joined the server");
 		embed.setColor(0x00ff00);
-		
-		embed.addField(new EmbedField("Player Name", playerName, false));
-		embed.addField(new EmbedField("X", String.valueOf(player.getX()), true));
-		embed.addField(new EmbedField("Y", String.valueOf(player.getY()), true));
-		embed.addField(new EmbedField("Z", String.valueOf(player.getZ()), true));
+
+		addPlayerInfoToEmbed(embed, player);
+		addCurrentlyPlayingToEmbed(embed, server);
 
 		ExecuteParams params = new ExecuteParams();
 		params.setUsername("Server Networking Notifier - " + server.getName());
@@ -147,10 +138,8 @@ public class DiscordWebhook implements ModInitializer {
 		embed.setTitle(playerName + " has left the server");
 		embed.setColor(0xff0000);
 		
-		embed.addField(new EmbedField("Player Name", playerName, false));
-		embed.addField(new EmbedField("X", String.valueOf(player.getX()), true));
-		embed.addField(new EmbedField("Y", String.valueOf(player.getY()), true));
-		embed.addField(new EmbedField("Z", String.valueOf(player.getZ()), true));
+		addPlayerInfoToEmbed(embed, player);
+		addCurrentlyPlayingToEmbed(embed, server);
 
 		ExecuteParams params = new ExecuteParams();
 		params.setUsername("Server Networking Notifier - " + server.getName());
@@ -178,6 +167,26 @@ public class DiscordWebhook implements ModInitializer {
 		}
 
 		return 1;
+	}
+
+	private void addPlayerInfoToEmbed(Embed embed, ServerPlayerEntity player) {
+		embed.addField(new EmbedField("Player Name", player.getDisplayName().getString(), false));
+		embed.addField(new EmbedField("Is operator", String.valueOf(player.hasPermissionLevel(2)), false));
+		embed.addField(new EmbedField("X", String.valueOf(player.getX()), true));
+		embed.addField(new EmbedField("Y", String.valueOf(player.getY()), true));
+		embed.addField(new EmbedField("Z", String.valueOf(player.getZ()), true));
+	} 
+
+	private void addServerInfoToEmbed(Embed embed, MinecraftServer server) {
+		embed.addField(new EmbedField("Server Name", server.getName(), true));
+		embed.addField(new EmbedField("Server IP", server.getServerIp(), true));
+		embed.addField(new EmbedField("Message of the day", server.getServerMotd(), false));
+		embed.addField(new EmbedField("Gamemode", server.getDefaultGameMode().toString(), false));
+	}
+
+	private void addCurrentlyPlayingToEmbed(Embed embed, MinecraftServer server) {
+		embed.addField(new EmbedField("Currently Playing", String.valueOf(server.getCurrentPlayerCount()), true));
+		embed.addField(new EmbedField("Max Playing", String.valueOf(server.getMaxPlayerCount()), true));
 	}
 
 	private void executeWebhook(ExecuteParams params) {
