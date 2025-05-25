@@ -3,39 +3,26 @@
 	"id": "discordwebhook",
 	"version": "${version}",
 	"name": "DiscordWebhook",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Fabric mod that sends information about server state and players using discord webhooks ",
 	"authors": [
-		"Me!"
+		"YasInvolved"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/YasInvolved/DiscordWebhookMod/issues",
+		"sources": "https://github.com/YasInvolved/DiscordWebhookMod"
 	},
-	"license": "CC0-1.0",
+	"license": "GNU GPL v3",
 	"icon": "assets/discordwebhook/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
 			"pl.yasinvolved.dcwebhook.DiscordWebhook"
-		],
-		"client": [
-			"pl.yasinvolved.dcwebhook.DiscordWebhookClient"
 		]
 	},
-	"mixins": [
-		"discordwebhook.mixins.json",
-		{
-			"config": "discordwebhook.client.mixins.json",
-			"environment": "client"
-		}
-	],
 	"depends": {
 		"fabricloader": ">=0.16.14",
 		"minecraft": "~1.21.5",
 		"java": ">=21",
 		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
 	}
 }
