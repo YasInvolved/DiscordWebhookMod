@@ -28,11 +28,14 @@ jobs:
 
             - name: Build
               run: ./gradlew build
+
+            - name: Delete sources file
+              run: rm -f build/lib/discordwebhook-*-sources.jar
             
             - name: Create GitHub Release
               uses: softprops/action-gh-release@v2
               with:
                 tag_name: ${{ github.ref_name }}
-                files: build/libs/discordwebhook-[0-9]*.jar
+                files: build/libs/discordwebhook-*.jar
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
